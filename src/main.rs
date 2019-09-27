@@ -1,4 +1,5 @@
 use actix_web::{middleware, web, App, HttpRequest, HttpServer};
+use actix_files as fs;
 use std::env;
 
 fn index(req: HttpRequest) -> &'static str {
@@ -16,8 +17,8 @@ fn main() -> std::io::Result<()> {
         App::new()
             // enable logger
             .wrap(middleware::Logger::default())
-            .service(web::resource("/index.html").to(|| "Hello world!"))
-            .service(web::resource("/").to(index))
+            .service(web::resource("/helloworld").to(index))
+            .service(fs::Files::new("/", "./static/").index_file("index.html"))
     })
     .bind(addr)?
     .run()
