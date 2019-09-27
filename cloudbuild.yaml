@@ -7,7 +7,7 @@ steps:
   args: ['push', 'gcr.io/$PROJECT_ID/rustgym-website']
   # Deploy container image to Cloud Run
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['beta', 'run', 'deploy', 'rustgym-website', '--image', 'gcr.io/$PROJECT_ID/rustgym-website-image', '--region', 'us-central1','--platform', 'managed', '--allow-unauthenticated', '--quiet']
+  args: ['beta', 'run', 'deploy', 'rustgym-website', '--image', 'gcr.io/$PROJECT_ID/rustgym-website', '--region', 'us-central1','--platform', 'managed', '--allow-unauthenticated', '--quiet']
 images:
 - gcr.io/$PROJECT_ID/rustgym-website
 timeout: 1800s
