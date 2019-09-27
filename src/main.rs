@@ -1,4 +1,5 @@
 use actix_web::{middleware, web, App, HttpRequest, HttpServer};
+use std::env;
 
 fn index(req: HttpRequest) -> &'static str {
     println!("REQ: {:?}", req);
@@ -6,8 +7,10 @@ fn index(req: HttpRequest) -> &'static str {
 }
 
 fn main() -> std::io::Result<()> {
-    std::env::set_var("RUST_LOG", "actix_web=info");
+    env::set_var("RUST_LOG", "actix_web=info");
     env_logger::init();
+    let port = env::var("PORT").unwrap_or("8080".to_string());
+    let addr = format!("127.0.0.1:{}", port);
 
     HttpServer::new(|| {
         App::new()
@@ -16,6 +19,6 @@ fn main() -> std::io::Result<()> {
             .service(web::resource("/index.html").to(|| "Hello world!"))
             .service(web::resource("/").to(index))
     })
-    .bind("127.0.0.1:8080")?
+    .bind(addr)?
     .run()
 }
