@@ -1,18 +1,13 @@
-# Use the official Rust image.
-# https://hub.docker.com/_/rust
-FROM rust:latest
-
-# Copy local code to the container image.
+FROM node:latest
 WORKDIR /usr/src/app
+COPY client .
+RUN npm install
+RUN npm run build
 
-COPY . .
-
-# Install production dependencies and build a release artifact.
+FROM rust:latest
+WORKDIR /usr/src/app
+COPY server .
 RUN cargo install --path .
-
-# Service must listen to $PORT environment variable.
-# This default value facilitates local development.
+COPY --from=0 /usr/src/app/public static
 ENV PORT 8080
-
-# Run the web service on container startup.
-CMD ["rustgym-website"]
+CMD ["rustgym-server"]

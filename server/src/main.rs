@@ -2,11 +2,6 @@ use actix_web::{middleware, web, App, HttpRequest, HttpServer};
 use actix_files as fs;
 use std::env;
 
-fn index(req: HttpRequest) -> &'static str {
-    println!("REQ: {:?}", req);
-    "Hello world!"
-}
-
 fn main() -> std::io::Result<()> {
     env::set_var("RUST_LOG", "actix_web=info");
     env_logger::init();
@@ -17,8 +12,7 @@ fn main() -> std::io::Result<()> {
         App::new()
             // enable logger
             .wrap(middleware::Logger::default())
-            .service(web::resource("/helloworld").to(index))
-            .service(fs::Files::new("/", "./static/").index_file("index.html"))
+            .service(fs::Files::new("/", "static").index_file("index.html"))
     })
     .bind(addr)?
     .run()

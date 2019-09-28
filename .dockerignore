@@ -1,1 +1,3 @@
-target
+target/
+server/target/
+client/node_modules/
