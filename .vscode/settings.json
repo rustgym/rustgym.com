@@ -1,0 +1,8 @@
+{
+  "files.exclude": {
+    "client/.cache": true,
+    "client/node_modules": true,
+    "client/public": true,
+    "node_modules": true
+  }
+}

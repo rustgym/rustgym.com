@@ -127,6 +127,7 @@ const IndexPage: React.FC<IndexProps> = props => {
         )}
         <meta property="og:image:width" content={width} />
         <meta property="og:image:height" content={height} />
+        <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet" />
       </Helmet>
       <Wrapper>
         <header
@@ -140,7 +141,7 @@ const IndexPage: React.FC<IndexProps> = props => {
               <SiteTitle>
                 {props.data.logo ? (
                   <img
-                    style={{ maxHeight: '45px' }}
+                    style={{ maxHeight: '90px' }}
                     src={props.data.logo.childImageSharp.fixed.src}
                     alt={config.title}
                   />
@@ -180,7 +181,7 @@ export default IndexPage;
 
 export const pageQuery = graphql`
   query blogPageQuery($skip: Int!, $limit: Int!) {
-    logo: file(relativePath: { eq: "img/ghost-logo.png" }) {
+    logo: file(relativePath: { eq: "img/rust-gym-logo.png" }) {
       childImageSharp {
         # Specify the image processing specifications right in the query.
         # Makes it trivial to update as your page's design changes.

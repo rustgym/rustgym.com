@@ -186,10 +186,9 @@ class SubscribeModal extends React.Component<any, SubscribeState> {
         <SubscribeOverlayClose onClick={this.close} />
         <SubscribeOverlayContent>
           <SubscribeLogo />
-          <SubscribeOverlayTitle>Subscribe to {config.title}</SubscribeOverlayTitle>
+          <SubscribeOverlayTitle>Request Invite to {config.title}</SubscribeOverlayTitle>
           <SubscribeOverlayDescription>
-            Stay up to date! Get all the latest &amp; greatest posts delivered straight to your
-            inbox
+            Be one of the first members of Rust Gym. Request an invite.
           </SubscribeOverlayDescription>
           <SubscribeForm />
         </SubscribeOverlayContent>
