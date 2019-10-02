@@ -2,7 +2,8 @@ const path = require('path');
 
 module.exports = {
   siteMetadata: {
-    title: 'RustGym',
+    title: 'Rust Gym',
+    siteUrl: 'https://beta.rustgym.com', // full path to blog - no ending slash
     description: 'The best gym for coding',
     siteUrl: 'https://gatsby-casper.netlify.com', // full path to blog - no ending slash
   },
@@ -47,7 +48,7 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-canonical-urls',
       options: {
-        siteUrl: 'https://gatsby-casper.netlify.com',
+        siteUrl: 'https://beta.rustgym.com',
       },
     },
     'gatsby-plugin-emotion',

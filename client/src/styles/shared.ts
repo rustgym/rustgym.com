@@ -145,3 +145,14 @@ export const AuthorProfileImage = css`
   width: 60px;
   height: 60px;
 `;
+
+export const ProfilePhotoStyles = css`
+  display: block;
+  /* background: color(var(--lightgrey) l(+10%)); */
+  background: ${lighten('0.1', colors.lightgrey)};
+  border-radius: 5%;
+  object-fit: cover;
+  margin-right: 15px;
+  width: 60px;
+  height: 60px;
+`;
