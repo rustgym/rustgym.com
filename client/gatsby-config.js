@@ -3,8 +3,9 @@ const path = require('path');
 module.exports = {
   siteMetadata: {
     title: 'Rust Gym',
-    description: 'A Gym for Coding',
     siteUrl: 'https://beta.rustgym.com', // full path to blog - no ending slash
+    description: 'The best gym for coding',
+    siteUrl: 'https://gatsby-casper.netlify.com', // full path to blog - no ending slash
   },
   mapping: {
     'MarkdownRemark.frontmatter.author': 'AuthorYaml',
