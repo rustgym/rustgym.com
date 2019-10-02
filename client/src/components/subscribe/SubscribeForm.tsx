@@ -107,7 +107,7 @@ const SubscribeForm: React.FC = () => {
         <input type="text" name={config.mailchimpName} tabIndex={-1} />
       </div>
       <SubscribeFormButton type="submit">
-        <span>Subscribe</span>
+        <span>Request Invite</span>
       </SubscribeFormButton>
     </form>
   );

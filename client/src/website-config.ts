@@ -50,7 +50,7 @@ export interface WebsiteConfig {
 
 const config: WebsiteConfig = {
   title: 'Rust Gym',
-  description: 'The professional publishing platform',
+  description: 'A Gym for Coding',
   coverImage: 'img/blog-cover.jpg',
   logo: 'img/rust-gym-logo.png',
   lang: 'en',
@@ -62,7 +62,7 @@ const config: WebsiteConfig = {
   mailchimpName: 'b_ea2586fa442d44245186dd375_4a96af3e9b',
   mailchimpEmailFieldName: 'EMAIL',
   googleSiteVerification: 'GoogleCode',
-  footer: 'a place to learn',
+  footer: 'A Gym for Coding',
 };
 
 export default config;

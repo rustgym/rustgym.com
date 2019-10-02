@@ -9,46 +9,44 @@ import { PostFullHeader, PostFullTitle, NoImage, PostFull } from '../templates/p
 import { PostFullContent } from '../components/PostContent';
 import Footer from '../components/Footer';
 import Helmet from 'react-helmet';
-import { graphql, StaticQuery, Link  } from 'gatsby';
+
+import larryPic from '../content/avatars/larry_avatar_400.jpg'
+import zanePic from '../content/avatars/zane_avatar_400.jpg'
+import markPic from '../content/avatars/mark_avatar_400.jpg'
 
 const PageTemplate = css`
   .site-main {
     background: #fff;
     padding-bottom: 4vw;
   }
+  .employee-pic {
+    border-radius: 100%;
+    height: 250px;
+    width: auto;
+    margin-bottom: 0;
+  }
+  .employee {
+    display:flex;
+    flex:2;
+    flex-wrap: wrap;
+    width: 300px;
+  }
+  .employee-container {
+    display: flex;
+  }
+  .employee-name, .employee-title {
+    text-align: center;
+  }
+  .employee-title {
+    font-style: italic;
+  }
+  .instructors-title {
+    text-align: center;
+    margin-bottom: 30px;
+  }
 `;
 
-interface SiteNavLogoProps {
-  logo?: {
-    childImageSharp: {
-      fixed: any;
-    };
-  };
-}
-const profilePic = () => (
-  <StaticQuery
-    query={graphql`
-      query ProfileQuery {
-        zane: file(relativePath: { eq: "img/zane.png" }) {
-          childImageSharp {
-            fixed {
-              ...GatsbyImageSharpFixed
-            }
-          }
-        }
-      }
-    `}
-    // tslint:disable-next-line:react-this-binding-issue
-    render={(data: SiteNavLogoProps) => (
-      <Link className="site-nav-logo" css={ProfilePhotoStyles} to="/">
-        {data.logo ? (
-          <img src={data.logo.childImageSharp.fixed.src} />
-        ) : (
-          config.title
-        )}
-      </Link>
-    )}
-  />)
+
 const About: React.FC = () => (
   <IndexLayout>
     <Helmet>
@@ -74,6 +72,33 @@ const About: React.FC = () => (
               <p>
                 We believe empowering developers is the only real way forward, and hands on training is the most effective way to do it. We believe self driven coders are the only ones who will truly be successful, but even self driven people need a helping hand now and again.
               </p>
+              <h3 className="instructors-title">Instructors</h3>
+              <div className="employee-container">
+                <div className="employee">
+                  <p>
+                    <img className="employee-pic" src={larryPic} />
+                  </p>
+                  <p>
+                    <div className="employee-name">Larry</div>
+                  </p>
+                </div>
+                <div className="employee">
+                  <p>
+                    <img className="employee-pic"  src={zanePic} />
+                  </p>
+                  <p>
+                    <div className="employee-name">Zane</div>
+                  </p>
+                </div>
+                <div className="employee">
+                  <p>
+                    <img className="employee-pic" src={markPic} />
+                  </p>
+                  <p>
+                    <div className="employee-name">Mark</div>
+                  </p>
+                </div>
+              </div>
               {/* <div css={ProfileCSS}>
               </div> */}
             </div>

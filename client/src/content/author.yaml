@@ -1,15 +1,13 @@
-- id: Ghost
-  avatar: avatars/ghost.png
-  bio: The professional publishing platform
-  twitter: TryGhost
-  facebook: ghost
-  website: https://ghost.org/
-  location: On a plane
-- id: Another Author
-  avatar: avatars/ghost.png
-  bio: This is another test author with a profile background image
-  twitter: TryGhost
-  facebook: ghost
-  website: https://ghost.org/
-  location: On a plane
+- id: Zane
+  avatar: avatars/zane_avatar_400.jpg
+  bio: CEO
+  website: https://zanehitchcox.com
+  location: Seattle
+  profile_image: img/alex-knight-326705-unsplash.jpg
+- id: Larry
+  avatar: avatars/larry_avatar_400.jpg
+  twitter: ""
+  facebook: ""
+  bio: Software Engineer
+  location: Seattle
   profile_image: img/alex-knight-326705-unsplash.jpg
