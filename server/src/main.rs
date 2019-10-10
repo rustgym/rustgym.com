@@ -1,44 +1,40 @@
-#[macro_use]
-extern crate diesel;
-use actix_web::{middleware, web, App, HttpRequest, HttpServer};
-use actix_files as fs;
+#[macro_use] extern crate log;
+#[macro_use] extern crate diesel_migrations;
+
 use std::env;
-use diesel::prelude::*;
-use diesel::pg::PgConnection;
-use postgres::{Connection, TlsMode};
+use dotenv::dotenv;
+use actix_session::CookieSession;
+use actix_web::{middleware, App, HttpServer};
+use actix_files as fs;
 
-// pub fn establish_connection() -> PgConnection {
-//     let database_url = env::var("DATABASE_URL").unwrap();
-//     PgConnection::establish(&database_url)
-//         .expect(&format!("Error connecting to {}", database_url))
-// }
+mod db;
+
+static SESSION_SIGNING_KEY: &[u8] = &[0; 32];
 
 
-fn main() -> std::io::Result<()> {
+fn main() -> Result<(), std::io::Error> {
+    dotenv().ok();
+
     env::set_var("RUST_LOG", "actix_web=info");
     env_logger::init();
-    let port = env::var("PORT").unwrap_or("8080".to_string());
+
+    let port = env::var("PORT").expect("Failed to get port");
     let addr = format!("0.0.0.0:{}", port);
-    HttpServer::new(|| {
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    let pool = db::init_pool(&database_url).expect("Failed to create pool");
+    db::run_db_migrations(&pool.clone()).expect("Failed migration");
+
+    let app = move || {
+        debug!("Constructing the App");
+        let session_store = CookieSession::signed(SESSION_SIGNING_KEY).secure(false);
         App::new()
-            // enable logger
+            .data(pool.clone())
             .wrap(middleware::Logger::default())
-            .service(web::resource("/db").to(|| {
-                let database_url = env::var("DATABASE_URL").unwrap();
-                let conn = Connection::connect(database_url, TlsMode::None).unwrap();
-                let mut s = "".to_string();
-                for row in &conn.query("SELECT * FROM guestbook", &[]).unwrap() {
-                    let a: String = row.get(0);
-                    let b: String = row.get(1);
-                    s += &a;
-                    s += "===";
-                    s += &b;
-                    s += "+++";
-                }
-                s
-            }))
+            .wrap(session_store)
             .service(fs::Files::new("/", "static").index_file("index.html"))
-    })
-    .bind(addr)?
-    .run()
+    };
+
+    debug!("Starting server");
+    HttpServer::new(app).bind(addr)?.run()
+
 }
