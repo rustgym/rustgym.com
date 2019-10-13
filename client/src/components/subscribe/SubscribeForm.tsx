@@ -87,7 +87,7 @@ const SubscribeForm: React.FC = () => {
     <form
       noValidate
       css={SubscribeFormStyles}
-      action={config.mailchimpAction}
+      action="/api/invitation"
       method="post"
       id="mc-embedded-subscribe-form"
       name="mc-embedded-subscribe-form"
@@ -98,8 +98,8 @@ const SubscribeForm: React.FC = () => {
         <SubscribeEmail
           className="subscribe-email"
           type="email"
-          name={config.mailchimpEmailFieldName}
-          id={config.mailchimpEmailFieldName}
+          name="email"
+          id="email-field"
           placeholder="youremail@example.com"
         />
       </FormGroup>
