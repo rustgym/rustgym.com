@@ -86,6 +86,7 @@ fn main() -> Result<(), std::io::Error> {
                         web::resource("/invitation").route(web::post().to_async(api::invitation)),
                     ),
             )
+            .service(fs::Files::new("/portal/", "portal").index_file("index.html"))
             .service(fs::Files::new("/", "static").index_file("index.html"))
     };
 

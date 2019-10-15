@@ -2,4 +2,6 @@
 target/
 **/*.rs.bk
 node_modules/
-static
+server/static
+server/portal
+portal/dist
