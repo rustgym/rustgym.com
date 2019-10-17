@@ -10,4 +10,4 @@ steps:
   args: ['beta', 'run', 'deploy', '$_SERVICE_NAME', '--image', 'gcr.io/$PROJECT_ID/rustgym-website', '--region', 'us-central1','--platform', 'managed', '--allow-unauthenticated', '--quiet']
 images:
 - gcr.io/$PROJECT_ID/rustgym-website
-timeout: 1800s
+timeout: 2400s

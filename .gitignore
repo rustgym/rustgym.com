@@ -5,3 +5,4 @@ node_modules/
 server/static
 server/portal
 portal/dist
+**/*.DS_Store
