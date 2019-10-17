@@ -1,23 +1,23 @@
 use actix_web::error::BlockingError;
 use actix_web::error::ResponseError;
 use actix_web::HttpResponse;
-use derive_more::Display;
 use diesel::result::{DatabaseErrorKind, Error as DBError};
 use diesel_migrations::RunMigrationsError;
+use failure::Fail;
 use r2d2::Error as R2d2Error;
 use sendgrid::errors::SendgridError;
 use std::convert::From;
 use uuid::parser::ParseError;
 
-#[derive(Debug, Display)]
+#[derive(Debug, Fail)]
 pub enum ServiceError {
-    #[display(fmt = "Internal Server Error")]
+    #[fail(display = "Internal Server Error")]
     InternalServerError,
 
-    #[display(fmt = "BadRequest: {}", _0)]
-    BadRequest(String),
+    #[fail(display = "BadRequest: {}", info)]
+    BadRequest { info: String },
 
-    #[display(fmt = "Unauthorized")]
+    #[fail(display = "Unauthorized")]
     Unauthorized,
 }
 
@@ -25,7 +25,7 @@ impl ResponseError for ServiceError {
     fn error_response(&self) -> HttpResponse {
         match self {
             ServiceError::InternalServerError => HttpResponse::InternalServerError().into(),
-            ServiceError::BadRequest(_) => HttpResponse::BadRequest().into(),
+            ServiceError::BadRequest { info: _ } => HttpResponse::BadRequest().into(),
             ServiceError::Unauthorized => HttpResponse::Unauthorized().into(),
         }
     }
@@ -33,7 +33,9 @@ impl ResponseError for ServiceError {
 
 impl From<ParseError> for ServiceError {
     fn from(error: ParseError) -> ServiceError {
-        ServiceError::BadRequest(format!("{:?}", error))
+        ServiceError::BadRequest {
+            info: format!("{:?}", error),
+        }
     }
 }
 
@@ -44,7 +46,7 @@ impl From<DBError> for ServiceError {
             DBError::DatabaseError(kind, info) => {
                 if let DatabaseErrorKind::UniqueViolation = kind {
                     let message = info.details().unwrap_or_else(|| info.message()).to_string();
-                    return ServiceError::BadRequest(message);
+                    return ServiceError::BadRequest { info: message };
                 }
                 ServiceError::InternalServerError
             }

@@ -1,8 +1,9 @@
+use crate::app_settings::AppSettings;
 use crate::models::*;
+use chrono::Duration;
 use http::status::StatusCode;
 use sendgrid::errors::SendgridError;
 use sendgrid::v3::*;
-// use chrono::Duration;
 
 pub fn send_invitation(
     invitation: Invitation,
@@ -12,12 +13,12 @@ pub fn send_invitation(
     let url_prefix_for_email = app_settings.url_prefix_for_email.to_string();
     let id = invitation.id;
     let email = invitation.email.to_string();
-    // let created_at = invitation.created_at;
-    // let expiration = Duration::minutes(app_settings.expiration_in_minutes as i64);
-    // let expires_at = created_at + expiration;
+    let created_at = invitation.created_at;
+    let expiration = Duration::minutes(app_settings.expiration_in_minutes as i64);
+    let expires_at = created_at + expiration;
     let registration_link = format!(
-        "{}/register.html?id={}&email={}",
-        url_prefix_for_email, id, email
+        "{}/portal/#register?id={}&email={}&expires_at={}",
+        url_prefix_for_email, id, email, expires_at
     );
     let template_data = [("registration_link".to_string(), registration_link)]
         .iter()

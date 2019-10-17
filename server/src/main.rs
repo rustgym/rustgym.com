@@ -16,13 +16,14 @@ use sendgrid::v3::*;
 use std::env;
 
 mod api;
+mod app_settings;
 mod db;
 mod email;
 mod errors;
 mod models;
 mod schema;
 
-use models::AppSettings;
+use app_settings::AppSettings;
 
 static SESSION_SIGNING_KEY: &[u8] = &[0; 32];
 
@@ -43,12 +44,14 @@ fn main() -> Result<(), std::io::Error> {
     let welcome_email_template_id =
         env::var("WELCOME_EMAIL_TEMPLATE_ID").expect("Fail to get welcome_email_template_id");
     let domain = env::var("DOMAIN").expect("Failed to get domain");
+    let local_salt = env::var("LOCAL_SALT").expect("Fail to get local_salt");
     let app_settings = AppSettings {
         url_prefix_for_email,
         noreply_email_address,
         expiration_in_minutes,
         welcome_email_template_id,
         domain: domain.to_string(),
+        local_salt,
     };
 
     let sendgrid_api_key = env::var("SENDGRID_API_KEY").expect("Fail to get sendgrid_api_key");
@@ -79,13 +82,7 @@ fn main() -> Result<(), std::io::Error> {
                     .max_age_time(chrono::Duration::minutes(1))
                     .secure(false),
             ))
-            .service(
-                web::scope("/api/")
-                    .service(web::resource("/session").route(web::get().to_async(api::session)))
-                    .service(
-                        web::resource("/invitation").route(web::post().to_async(api::invitation)),
-                    ),
-            )
+            .service(web::scope("/api/").configure(api::api_config))
             .service(fs::Files::new("/portal/", "portal").index_file("index.html"))
             .service(fs::Files::new("/", "static").index_file("index.html"))
     };
