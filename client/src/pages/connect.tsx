@@ -63,7 +63,7 @@ const Discord: React.FC = () => (
           <div style={{textAlign: "center"}}>
             <iframe
               src="https://discordapp.com/widget?id=629047160457003040&theme=dark"
-              width={Math.min(window.innerWidth, 700)}
+              width="350"
               height="500"
               allowTransparency={true}
               frameBorder="0">
