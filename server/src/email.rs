@@ -1,5 +1,5 @@
 use crate::app_settings::AppSettings;
-use crate::models::*;
+use crate::models::invitation::*;
 use chrono::Duration;
 use http::status::StatusCode;
 use sendgrid::errors::SendgridError;

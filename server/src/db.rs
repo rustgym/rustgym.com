@@ -10,7 +10,10 @@ use time::Duration;
 use crate::app_settings::AppSettings;
 use crate::email::send_invitation;
 use crate::errors::ServiceError;
-use crate::models::*;
+use crate::models::user::*;
+use crate::models::invitation::*;
+use crate::models::credential::*;
+use crate::models::auth::*;
 
 embed_migrations!();
 

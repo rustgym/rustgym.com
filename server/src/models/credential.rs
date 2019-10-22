@@ -5,47 +5,7 @@ use argon2rs::{Argon2, Variant};
 use chrono::{NaiveDateTime, Utc};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
-use time::Duration;
 use uuid::Uuid;
-
-#[derive(Deserialize)]
-pub struct InvitationForm {
-    pub email: String,
-}
-
-#[derive(Debug, Serialize, Deserialize, Queryable, Insertable)]
-#[table_name = "invitations"]
-pub struct Invitation {
-    pub id: Uuid,
-    pub email: String,
-    pub created_at: NaiveDateTime,
-}
-
-impl Invitation {
-    pub fn is_expired(&self, duration: Duration) -> bool {
-        Utc::now().naive_utc() - self.created_at > duration
-    }
-}
-
-impl From<String> for Invitation {
-    fn from(email: String) -> Self {
-        Invitation {
-            id: Uuid::new_v4(),
-            email: email,
-            created_at: Utc::now().naive_utc(),
-        }
-    }
-}
-
-#[derive(Deserialize)]
-pub struct SignupForm {
-    pub invitation_id: Uuid,
-    pub email: String,
-    pub password: String,
-    pub first_name: String,
-    pub last_name: String,
-    pub middle_name: Option<String>,
-}
 
 #[derive(Debug, Serialize, Deserialize, Queryable, Insertable)]
 #[table_name = "credentials"]
@@ -139,13 +99,4 @@ mod tests {
             false
         );
     }
-}
-
-#[derive(Debug, Serialize, Deserialize, Queryable, Insertable)]
-#[table_name = "users"]
-pub struct User {
-    pub id: i32,
-    pub first_name: String,
-    pub last_name: String,
-    pub middle_name: Option<String>,
 }
