@@ -1,4 +1,4 @@
-pub mod invitation;
-pub mod credential;
 pub mod auth;
+pub mod credential;
+pub mod invitation;
 pub mod user;

@@ -1,7 +1,7 @@
 use crate::schema::*;
-use uuid::Uuid;
-use time::Duration;
 use chrono::{NaiveDateTime, Utc};
+use time::Duration;
+use uuid::Uuid;
 
 #[derive(Deserialize)]
 pub struct InvitationForm {
