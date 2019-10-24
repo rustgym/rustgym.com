@@ -1,4 +1,4 @@
-use crate::schema::*;
+use crate::schema::invitations;
 use chrono::{NaiveDateTime, Utc};
 use time::Duration;
 use uuid::Uuid;

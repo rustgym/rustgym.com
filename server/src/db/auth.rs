@@ -1,94 +1,15 @@
-use diesel::pg::PgConnection;
 use diesel::prelude::*;
-use diesel::r2d2::{ConnectionManager, Pool, PoolError, PooledConnection};
 use diesel::result::Error::NotFound;
 use diesel::{insert_into, update};
-use http::status::StatusCode;
-use sendgrid::v3::Sender;
 use time::Duration;
 
 use crate::app_settings::AppSettings;
-use crate::email::*;
+use crate::db::{get_conn, PgPool};
 use crate::errors::ServiceError;
 use crate::models::auth::*;
 use crate::models::credential::*;
 use crate::models::invitation::*;
 use crate::models::user::*;
-
-embed_migrations!();
-
-pub type PgPool = Pool<ConnectionManager<PgConnection>>;
-type PgPooledConnection = PooledConnection<ConnectionManager<PgConnection>>;
-
-pub fn init_pool(database_url: &str) -> Result<PgPool, PoolError> {
-    let manager = ConnectionManager::<PgConnection>::new(database_url);
-    Pool::builder().build(manager)
-}
-
-fn get_conn(pool: &PgPool) -> Result<PgPooledConnection, r2d2::Error> {
-    pool.get()
-}
-
-pub fn run_db_migrations(pool: &PgPool) -> Result<(), ServiceError> {
-    let conn = get_conn(pool)?;
-    embedded_migrations::run_with_output(&conn, &mut std::io::stdout())?;
-    Ok(())
-}
-
-pub fn create_invitation(
-    invitation_form: InvitationForm,
-    app_settings: &AppSettings,
-    sender: &Sender,
-    pool: &PgPool,
-) -> Result<(), ServiceError> {
-    use crate::schema::invitations::dsl::*;
-
-    let conn = get_conn(pool)?;
-    let invitation = insert_into(invitations)
-        .values(Invitation::from(invitation_form.email))
-        .get_result(&conn)?;
-    let code = send_invitation(invitation, &sender, &app_settings)?;
-    match code {
-        StatusCode::ACCEPTED => Ok(()),
-        StatusCode::BAD_REQUEST => Err(ServiceError::BadRequest {
-            info: format!("InvalidEmail"),
-        }),
-        _ => Err(ServiceError::InternalServerError),
-    }
-}
-
-pub fn create_reset_password_invitation(
-    invitation_form: InvitationForm,
-    app_settings: &AppSettings,
-    sender: &Sender,
-    pool: &PgPool,
-) -> Result<(), ServiceError> {
-    use crate::schema::credentials::dsl::*;
-    use crate::schema::invitations::dsl::*;
-
-    let conn = get_conn(pool)?;
-    let _: Credential = credentials
-        .filter(crate::schema::credentials::dsl::email.eq(&invitation_form.email))
-        .first(&conn)
-        .map_err(|err| match err {
-            diesel::result::Error::NotFound => ServiceError::BadRequest {
-                info: format!("InvalidEmail"),
-            },
-            _ => ServiceError::InternalServerError,
-        })?;
-
-    let invitation = insert_into(invitations)
-        .values(Invitation::from(invitation_form.email))
-        .get_result(&conn)?;
-    let code = send_reset_password_invitation(invitation, &sender, &app_settings)?;
-    match code {
-        StatusCode::ACCEPTED => Ok(()),
-        StatusCode::BAD_REQUEST => Err(ServiceError::BadRequest {
-            info: format!("InvalidEmail"),
-        }),
-        _ => Err(ServiceError::InternalServerError),
-    }
-}
 
 pub fn process_signup_form(
     signup_form: SignupForm,
@@ -222,11 +143,4 @@ pub fn process_reset_password_form(
         .set(&credential)
         .get_result(&conn)?;
     Ok(credential)
-}
-
-pub fn session(id: Option<String>) -> Result<String, ServiceError> {
-    match id {
-        Some(user_id) => Ok(user_id),
-        None => Err(ServiceError::Unauthorized),
-    }
 }

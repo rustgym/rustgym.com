@@ -1,4 +1,4 @@
-use crate::schema::*;
+use crate::schema::credentials;
 use argon2rs::defaults::{KIB, LANES, PASSES};
 use argon2rs::verifier::Encoded;
 use argon2rs::{Argon2, Variant};

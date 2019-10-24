@@ -1,4 +1,4 @@
-use crate::schema::*;
+use crate::schema::users;
 
 #[derive(Debug, Serialize, Deserialize, Queryable, Insertable)]
 #[table_name = "users"]
