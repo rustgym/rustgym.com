@@ -33,26 +33,7 @@ fn main() -> Result<(), std::io::Error> {
     env::set_var("RUST_LOG", "info,actix_web=info");
     env_logger::init();
 
-    let url_prefix_for_email =
-        env::var("URL_PREFIX_FOR_EMAIL").expect("Fail to get url_prefix_for_email");
-    let noreply_email_address =
-        env::var("NOREPLY_EMAIL_ADDRESS").expect("Fail to get noreply_email_address");
-    let expiration_in_minutes = env::var("EXPIRATION_IN_MINUTES")
-        .expect("Fail to get expiration_in_minutes")
-        .parse::<u32>()
-        .expect("Fail to parse expiration_in_minutes");
-    let welcome_email_template_id =
-        env::var("WELCOME_EMAIL_TEMPLATE_ID").expect("Fail to get welcome_email_template_id");
-    let domain = env::var("DOMAIN").expect("Failed to get domain");
-    let local_salt = env::var("LOCAL_SALT").expect("Fail to get local_salt");
-    let app_settings = AppSettings {
-        url_prefix_for_email,
-        noreply_email_address,
-        expiration_in_minutes,
-        welcome_email_template_id,
-        domain: domain.to_string(),
-        local_salt,
-    };
+    let app_settings = AppSettings::new();
 
     let sendgrid_api_key = env::var("SENDGRID_API_KEY").expect("Fail to get sendgrid_api_key");
     let sender = Sender::new(sendgrid_api_key);
@@ -78,7 +59,7 @@ fn main() -> Result<(), std::io::Error> {
                 CookieIdentityPolicy::new(SESSION_SIGNING_KEY)
                     .name("rustgym_auth")
                     .path("/")
-                    .domain(domain.as_str())
+                    .domain(&app_settings.domain)
                     .max_age_time(chrono::Duration::minutes(1))
                     .secure(false),
             ))

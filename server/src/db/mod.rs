@@ -1,10 +1,13 @@
-use crate::errors::ServiceError;
 use diesel::pg::PgConnection;
 use diesel::r2d2::{ConnectionManager, Pool, PoolError, PooledConnection};
+
+use crate::errors::ServiceError;
+use crate::models::user::User;
 
 pub mod auth;
 pub mod invitation;
 pub mod migration;
+pub mod user;
 
 pub type PgPool = Pool<ConnectionManager<PgConnection>>;
 type PgPooledConnection = PooledConnection<ConnectionManager<PgConnection>>;
@@ -18,9 +21,6 @@ pub fn get_conn(pool: &PgPool) -> Result<PgPooledConnection, r2d2::Error> {
     pool.get()
 }
 
-pub fn session(id: Option<String>) -> Result<String, ServiceError> {
-    match id {
-        Some(user_id) => Ok(user_id),
-        None => Err(ServiceError::Unauthorized),
-    }
+pub fn session(user: User) -> Result<User, ServiceError> {
+    Ok(user)
 }

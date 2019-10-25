@@ -1,3 +1,7 @@
+use actix_identity::Identity;
+use actix_web::{dev::Payload, Error, FromRequest, HttpRequest};
+
+use crate::errors::ServiceError;
 use crate::schema::users;
 
 #[derive(Debug, Serialize, Deserialize, Queryable, Insertable)]
@@ -7,4 +11,31 @@ pub struct User {
     pub first_name: String,
     pub last_name: String,
     pub middle_name: Option<String>,
+}
+
+impl FromRequest for User {
+    type Config = ();
+    type Error = Error;
+    type Future = Result<User, Error>;
+
+    fn from_request(req: &HttpRequest, pl: &mut Payload) -> Self::Future {
+        if let Some(identity) = Identity::from_request(req, pl)?.identity() {
+            let user: User = serde_json::from_str(&identity)?;
+            return Ok(user);
+        }
+        Err(ServiceError::Unauthorized.into())
+    }
+}
+
+#[derive(Deserialize, AsChangeset)]
+#[table_name = "users"]
+pub struct UserForm {
+    pub first_name: String,
+    pub last_name: String,
+    pub middle_name: Option<String>,
+}
+
+#[derive(Deserialize)]
+pub struct UserQueryByText {
+    pub text: String,
 }

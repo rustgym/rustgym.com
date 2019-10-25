@@ -79,8 +79,9 @@ pub fn process_signin_form(
     signin_form: SigninForm,
     app_settings: &AppSettings,
     pool: &PgPool,
-) -> Result<i32, ServiceError> {
+) -> Result<User, ServiceError> {
     use crate::schema::credentials::dsl::*;
+    use crate::schema::users::dsl::*;
 
     let conn = get_conn(pool)?;
 
@@ -93,8 +94,9 @@ pub fn process_signin_form(
             },
             _ => ServiceError::InternalServerError,
         })?;
+    let user: User = users.find(credential.user_id).first(&conn)?;
     if credential.compare(signin_form.password, app_settings.local_salt.to_string()) {
-        Ok(credential.user_id)
+        Ok(user)
     } else {
         Err(ServiceError::BadRequest {
             info: format!("Invalid"),

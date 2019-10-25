@@ -45,8 +45,13 @@ pub fn signin(
         db::auth::process_signin_form(signin_form.into_inner(), &app_settings, &pool)
     })
     .from_err()
-    .map(move |user_id| {
-        id.remember(user_id.to_string());
+    .map(move |user| {
+        id.remember(serde_json::to_string(&user).unwrap());
         HttpResponse::Ok().body("Ok")
     })
+}
+
+pub fn signout(id: Identity) -> HttpResponse {
+    id.forget();
+    HttpResponse::Ok().body("Ok")
 }
