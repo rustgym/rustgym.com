@@ -1,19 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
-import Button from '@material-ui/core/Button';
+import {root} from './stores/root.js'
+import {App} from './views/App.js';
 
-function App() {
-  return (
-    <Button variant="contained" color="primary">
-      Hello World
-    </Button>
-  );
-}
+window.S = root
 
 ReactDOM.render(
   <App />,
   document.getElementById('root')
 );
 
-  
+
