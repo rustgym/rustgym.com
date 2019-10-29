@@ -1,15 +1,16 @@
 import { observable, action, toJS } from "mobx";
 
 class router {
-    @observable path = "#signin";
-    @observable state = {path: "#signin"};
+    @observable path = "";
+    @observable state = null;
     constructor(){
+        let hash = window.location.hash ? window.location.hash : "#home";
+        this.path = hash;
+        this.state = {};
         window.history.pushState(toJS(this.state), "", this.path);
         window.onpopstate = (event) => {
-            let path = event.state.path;
-            this.path = path;
-            this.state.path = path;
-            console.log(this.path);
+            this.state = event.state || {}
+            this.path = window.location.hash;
         }; 
     }
 

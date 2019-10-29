@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
-    "start": "webpack-dev-server --open --port 8081"
+    "dev": "webpack-dev-server --port 8081"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +19,8 @@
     "@material-ui/icons": "^4.5.1",
     "babel-loader": "^8.0.6",
     "babel-preset-mobx": "^2.0.0",
+    "dotenv": "^8.2.0",
+    "dotenv-webpack": "^1.7.0",
     "lodash": "^4.17.15",
     "mobx": "^5.14.0",
     "mobx-react": "^6.1.4",

@@ -2,7 +2,7 @@ import React from 'react'
 
 const Home = () =>
   <div>
-      home
+    home
   </div>
 
 export {Home}

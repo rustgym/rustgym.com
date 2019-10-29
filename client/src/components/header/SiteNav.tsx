@@ -142,6 +142,9 @@ class SiteNav extends React.Component<SiteNavProps> {
             <li role="menuitem">
               <Link to="/connect">Connect</Link>
             </li>
+            <li role="menuitem">
+              <a href="/portal/">Portal</a>
+            </li>
           </ul>
         </SiteNavLeft>
         <SiteNavRight>

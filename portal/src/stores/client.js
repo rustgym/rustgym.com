@@ -1,15 +1,41 @@
 import request from 'superagent';
 
-const endpoint = 'http://localhost:8080/api'
+const endpoint = process.env.URL_PREFIX_FOR_API
 
 class client{
-  signin = async (email, password) => {
-    return await request
+  signin = (email, password) => {
+    return request
       .post(`${endpoint}/signin`)
       .type("form")
       .send({email, password})
       .then(res => res.text)
-      .catch(err => {console.log(err)})
+      .catch(err => {
+        if (err.status == 400){
+          window.location.hash = "#signin";
+        }
+        if (err.status >= 500) {
+          S.errors.status = err.status;
+          S.errors.open = true;
+        } 
+        throw err;  
+      })
+  }
+  signout = () => {
+    return request
+      .post(`${endpoint}/signout`)
+      .type("form")
+      .send({})
+      .then(res => res.text)
+      .catch(err => {
+        if (err.status == 400){
+          window.location.hash = "#signin";
+        }
+        if (err.status >= 500) {
+          S.errors.status = err.status;
+          S.errors.open = true;
+        } 
+        throw err;  
+      })
   }
 }
 

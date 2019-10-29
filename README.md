@@ -18,3 +18,8 @@ change localhost to host.docker.internal in .env file to run container on mac
 $ docker build .
 $ docker run -p 8080:8080 --rm --env-file=.env {image-id}
 ```
+
+## run dev server with nginx
+```
+$ ./dev.sh
+```

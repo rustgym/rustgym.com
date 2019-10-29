@@ -65,8 +65,8 @@ const SignIn = observer(() => {
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
-            value={S.signin.email}
-            onChange={({target}) => S.signin.onChangeEmail(target)}
+            value={S.auth.email}
+            onChange={({target}) => S.auth.onChangeEmail(target)}
             variant="outlined"
             margin="normal"
             required
@@ -76,10 +76,11 @@ const SignIn = observer(() => {
             name="email"
             autoComplete="email"
             autoFocus
+            error={S.auth.error}
           />
           <TextField
-            value={S.signin.password}
-            onChange={({target}) => S.signin.onChangePassword(target)}
+            value={S.auth.password}
+            onChange={({target}) => S.auth.onChangePassword(target)}
             variant="outlined"
             margin="normal"
             required
@@ -89,9 +90,10 @@ const SignIn = observer(() => {
             type="password"
             id="password"
             autoComplete="current-password"
+            error={S.auth.error}
           />
           <Button
-            onClick={() => S.signin.onClickSignIn()}
+            onClick={() => S.auth.onClickSignIn()}
             fullWidth
             variant="contained"
             color="primary"
