@@ -1,6 +1,6 @@
 import request from 'superagent';
 
-const endpoint = process.env.URL_PREFIX_FOR_API
+const endpoint = '/api'
 
 class client{
   signin = (email, password) => {
