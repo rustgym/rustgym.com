@@ -10,7 +10,7 @@ class client{
         .then(res => res.text)
         .catch(err => {
           if (err.status == 401){
-            window.location.hash = "#signin";
+            S.router.redirect("#signin")
           }
           if (err.status >= 500) {
             S.errors.status = err.status;
@@ -28,7 +28,7 @@ class client{
         .then(res => res.text)
         .catch(err => {
           if (err.status == 401){
-            window.location.hash = "#signin";
+            S.router.redirect("#signin")
           }
           if (err.status >= 500) {
             S.errors.status = err.status;

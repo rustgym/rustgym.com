@@ -5,6 +5,7 @@ import {observe, setter} from 'mobx-decorators'
 class router {
     @observable path = "";
     @observable state = null;
+
     constructor(){
         let hash = window.location.hash ? window.location.hash : "#home";
         this.path = hash;
@@ -24,7 +25,15 @@ class router {
         if (path.match(/^#(\w)+$/)) {
             this.path = path;
             this.state.path = path;
-            window.history.pushState(toJS(this.state), "", this.path);    
+            window.history.pushState(toJS(this.state), "", this.path);
+        }
+    }
+
+    @action redirect(path) {
+        if (path.match(/^#(\w)+$/)) {
+            this.path = path;
+            this.state.path = path;
+            window.history.replaceState(toJS(this.state), "", this.path);
         }
     }
 }
