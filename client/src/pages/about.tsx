@@ -72,7 +72,7 @@ const About: React.FC = () => (
               <p>
                 We believe empowering developers is the only real way forward, and hands on training is the most effective way to do it. We believe self driven coders are the only ones who will truly be successful, but even self driven people need a helping hand now and again.
               </p>
-              <h3 className="instructors-title">Instructors</h3>
+              <h3 className="instructors-title">Leaders</h3>
               <div className="employee-container">
                 <div className="employee">
                   <p>
