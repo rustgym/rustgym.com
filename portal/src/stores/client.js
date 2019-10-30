@@ -1,41 +1,54 @@
 import request from 'superagent';
 
 const endpoint = '/api'
-
 class client{
-  signin = (email, password) => {
-    return request
-      .post(`${endpoint}/signin`)
-      .type("form")
-      .send({email, password})
-      .then(res => res.text)
-      .catch(err => {
-        if (err.status == 400){
-          window.location.hash = "#signin";
-        }
-        if (err.status >= 500) {
-          S.errors.status = err.status;
-          S.errors.open = true;
-        } 
-        throw err;  
-      })
+  constructor(){
+    this.get = (api, query) => {
+      return request
+        .get(`${endpoint}/${api}`)
+        .query(query)
+        .then(res => res.text)
+        .catch(err => {
+          if (err.status == 401){
+            window.location.hash = "#signin";
+          }
+          if (err.status >= 500) {
+            S.errors.status = err.status;
+            S.errors.open = true;
+          } 
+          throw err;  
+        })
+    }
+
+    this.post = (api, payload) => {
+      return request
+        .post(`${endpoint}/${api}`)
+        .type("form")
+        .send(payload)
+        .then(res => res.text)
+        .catch(err => {
+          if (err.status == 401){
+            window.location.hash = "#signin";
+          }
+          if (err.status >= 500) {
+            S.errors.status = err.status;
+            S.errors.open = true;
+          } 
+          throw err;
+        })
+    }
   }
+
+  signin = (email, password) => {
+    return this.post('signin', {email, password});
+  }
+
   signout = () => {
-    return request
-      .post(`${endpoint}/signout`)
-      .type("form")
-      .send({})
-      .then(res => res.text)
-      .catch(err => {
-        if (err.status == 400){
-          window.location.hash = "#signin";
-        }
-        if (err.status >= 500) {
-          S.errors.status = err.status;
-          S.errors.open = true;
-        } 
-        throw err;  
-      })
+    return this.post('signout', {});
+  }
+
+  session = () => {
+    return this.get('session', {})
   }
 }
 

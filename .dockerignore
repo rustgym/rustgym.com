@@ -1,6 +1,9 @@
 .env
 target/
 server/target/
+server/static/
+server/portal/
 client/node_modules/
 portal/node_modules/
 portal/dist/
+example/

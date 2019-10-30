@@ -1,15 +1,14 @@
 import React from 'react';
 import {observer} from 'mobx-react';
-import {Topbar} from './Topbar.js';
 import {routes} from './routes.js';
 import {ErrorSnackbar} from './ErrorSnackbar.js';
+import {Layout} from './Layout.js'
 
 const App = observer(() => 
   <div>
-    <Topbar/>
-    <div>
+    <Layout> 
       {routes[S.router.path]}
-    </div>
+    </Layout>
     <ErrorSnackbar/>
   </div>
 )

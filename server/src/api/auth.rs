@@ -6,6 +6,7 @@ use crate::app_settings::AppSettings;
 use crate::db;
 use crate::errors::ServiceError;
 use crate::models::auth::*;
+use crate::models::user::User;
 
 pub fn signup(
     signup_form: web::Form<SignupForm>,
@@ -54,4 +55,10 @@ pub fn signin(
 pub fn signout(id: Identity) -> HttpResponse {
     id.forget();
     HttpResponse::Ok().body("Ok")
+}
+
+pub fn session(user: User) -> impl Future<Item = HttpResponse, Error = ServiceError> {
+    web::block(move || db::session(user))
+        .from_err()
+        .map(|user| HttpResponse::Ok().json(user))
 }

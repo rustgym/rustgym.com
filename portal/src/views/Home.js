@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
-const Home = () =>
-  <div>
-    home
-  </div>
+const Home = () => {
+  useEffect(() => {
+    S.auth.loadSession()
+  })
+  return (
+    <div>
+      home
+    </div>
+  )
+}
 
 export {Home}

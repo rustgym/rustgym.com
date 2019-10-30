@@ -1,4 +1,6 @@
 import { observable, action, toJS } from "mobx";
+import {observe, setter} from 'mobx-decorators'
+
 
 class router {
     @observable path = "";
@@ -9,9 +11,13 @@ class router {
         this.state = {};
         window.history.pushState(toJS(this.state), "", this.path);
         window.onpopstate = (event) => {
-            this.state = event.state || {}
-            this.path = window.location.hash;
-        }; 
+            if (window.location.hash) {
+                this.state = event.state || {}
+                this.path = window.location.hash || "#home";
+            }else{
+                this.navigate("#signin")
+            }
+        };
     }
 
     @action navigate(path) {

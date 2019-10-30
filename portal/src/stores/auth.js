@@ -5,6 +5,7 @@ class auth {
     @observable password = "";
     @observable error = false;
     @observable errMessage = "";
+    @observable session = null;
 
     constructor(){
 
@@ -19,23 +20,29 @@ class auth {
     }
 
     onClickSignIn = () => {
+        S.auth.error = false;
         S.client.signin(this.email, this.password)
             .then(res => S.router.navigate("#home"))
             .catch(err => {
                 if (err.status == 400){
-                    S.signin.error = true;
+                    S.auth.error = true;
                 }
                 console.log(JSON.stringify(err, null, 2))
             })
         ;
     }
     onClickSignOut = () => {
+        S.auth.session = null;
         S.client.signout()
             .then(res => S.router.navigate("#signin"))
             .catch(err => {
                 console.log(JSON.stringify(err, null, 2))
             })
         ;
+    }
+    loadSession = async () => {
+        console.log("loadSession");
+        S.auth.session = JSON.parse(await S.client.session());
     }
 }
 

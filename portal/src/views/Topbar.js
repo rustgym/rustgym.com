@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import {observer} from 'mobx-react';
 import {
   AppBar,
   Badge,
@@ -84,22 +85,36 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Topbar = () =>
+const SignOutButton = () =>
+  <Button
+    className={useStyles().logoutButton}
+    color="inherit"
+    onClick={() => S.auth.onClickSignOut()}
+  >
+    <InputIcon className={useStyles().logoutIcon} />
+    Sign out
+  </Button>
+
+
+const Topbar = observer(() =>
   <AppBar>
     <Toolbar>
       <Typography variant="h6" className={useStyles().flexGrow}>
         Rust Gym 
       </Typography>
-      <Button
-      className={useStyles().logoutButton}
-      color="inherit"
-      onClick={() => S.auth.onClickSignOut()}
-    >
-      <InputIcon className={useStyles().logoutIcon} />
-        Sign out
-    </Button>
+      {
+        S.auth.session ?
+          <Fragment>
+            <Typography variant="h6">
+                {S.auth.session.first_name} {S.auth.session.last_name}
+            </Typography>
+            <SignOutButton/>
+          </Fragment>
+        :
+          null
+      }
     </Toolbar>
   </AppBar>
-
+)
 
 export {Topbar}
