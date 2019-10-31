@@ -50,6 +50,10 @@ class client{
   session = () => {
     return this.get('session', {})
   }
+
+  sendInvitation = (email) => {
+    return this.post('invitation', {email})
+  }
 }
 
 export {client}

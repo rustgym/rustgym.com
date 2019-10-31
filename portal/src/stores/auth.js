@@ -31,6 +31,20 @@ class auth {
             })
         ;
     }
+
+    onClickSendInvitation = () => {
+        S.auth.error = false;
+        S.client.sendInvitation(this.email)
+            .then(res => {})
+            .catch(err => {
+                if (err.status == 400){
+                    S.auth.error = true;
+                }
+                console.log(JSON.stringify(err, null, 2))
+            })
+        ;
+    }
+
     onClickSignOut = () => {
         S.auth.session = null;
         S.client.signout()
@@ -40,6 +54,7 @@ class auth {
             })
         ;
     }
+
     loadSession = async () => {
         console.log("loadSession");
         S.auth.session = JSON.parse(await S.client.session());

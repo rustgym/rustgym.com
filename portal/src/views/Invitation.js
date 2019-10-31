@@ -6,22 +6,22 @@ import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import {observer} from 'mobx-react';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import {Copyright} from '../components/Copyright.js';
 import {classes} from '../styles.js';
 
-const SignIn = observer(() => 
+const Invitation = observer(() => 
   <Container component="main" maxWidth="xs">
     <CssBaseline />
     <div className={classes().paper}>
       <Avatar className={classes().avatar}>
-        <LockOutlinedIcon />
+        <MailOutlineIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
-        Sign in
+        Invitation
       </Typography>
       <form className={classes().form} noValidate>
         <TextField
@@ -38,38 +38,24 @@ const SignIn = observer(() =>
           autoFocus
           error={S.auth.error}
         />
-        <TextField
-          value={S.auth.password}
-          onChange={({target}) => S.auth.onChangePassword(target)}
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          name="password"
-          label="Password"
-          type="password"
-          id="password"
-          autoComplete="current-password"
-          error={S.auth.error}
-        />
         <Button
-          onClick={() => S.auth.onClickSignIn()}
+          onClick={() => S.auth.onClickSendInvitation()}
           fullWidth
           variant="contained"
           color="primary"
           className={classes().submit}
         >
-          Sign In
+          Send Invitation
         </Button>
         <Grid container>
           <Grid item xs>
-            <Link href="#reset-password-invitation" variant="body2">
+            <Link href="#" variant="body2">
               Forgot password?
             </Link>
           </Grid>
           <Grid item>
-            <Link href="#invitation" variant="body2">
-              Sign Up
+            <Link href="#signin" variant="body2">
+              Sign In
             </Link>
           </Grid>
         </Grid>
@@ -81,4 +67,4 @@ const SignIn = observer(() =>
   </Container>
 )
 
-export { SignIn }
+export { Invitation }
