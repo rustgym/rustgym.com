@@ -5,7 +5,9 @@ import { Topbar } from './Topbar.js';
 const Layout = ({ children }) => 
   <Fragment>
     <Topbar/>
-    {children}
+    <div style={{marginTop: 70}}>
+      {children}
+    </div>
   </Fragment>
 
 export {Layout}

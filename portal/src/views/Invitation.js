@@ -29,7 +29,6 @@ const Invitation = observer(() =>
           onChange={({target}) => S.auth.onChangeEmail(target)}
           variant="outlined"
           margin="normal"
-          required
           fullWidth
           id="email"
           label="Email Address"

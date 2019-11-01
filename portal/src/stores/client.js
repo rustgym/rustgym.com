@@ -10,11 +10,11 @@ class client{
         .then(res => res.text)
         .catch(err => {
           if (err.status == 401){
-            S.router.redirect("#signin")
+            S.router.redirect('#signin')
           }
           if (err.status >= 500) {
-            S.errors.status = err.status;
-            S.errors.open = true;
+            S.feedback.status = err.status;
+            S.feedback.error('Internal Service Error');
           } 
           throw err;  
         })
@@ -23,16 +23,16 @@ class client{
     this.post = (api, payload) => {
       return request
         .post(`${endpoint}/${api}`)
-        .type("form")
+        .type('form')
         .send(payload)
         .then(res => res.text)
         .catch(err => {
           if (err.status == 401){
-            S.router.redirect("#signin")
+            S.router.redirect('#signin')
           }
           if (err.status >= 500) {
-            S.errors.status = err.status;
-            S.errors.open = true;
+            S.feedback.status = err.status;
+            S.feedback.error('Internal Service Error');
           } 
           throw err;
         })
@@ -45,6 +45,10 @@ class client{
 
   signout = () => {
     return this.post('signout', {});
+  }
+
+  signup = (invitation_id, email, password, first_name, last_name, middle_name) => {
+    return this.post('signup', {invitation_id, email, password, first_name, last_name, middle_name});
   }
 
   session = () => {

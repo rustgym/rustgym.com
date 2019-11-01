@@ -4,9 +4,12 @@ import {
   AppBar,
   Button,
   Toolbar,
+  Link,
+  IconButton,
 } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import InputIcon from '@material-ui/icons/Input';
+import MenuIcon from '@material-ui/icons/Menu';
 import {classes} from '../styles.js'
 
 
@@ -20,21 +23,34 @@ const SignOutButton = () =>
     Sign out
   </Button>
 
+const BarItems = () => 
+  <Fragment>
+    <Typography variant="h6" >
+      {S.auth.session.first_name} {S.auth.session.last_name}
+    </Typography>
+    <SignOutButton/>
+  </Fragment>
 
 const Topbar = observer(() =>
-  <AppBar>
+  <AppBar >
     <Toolbar>
-      <Typography variant="h6" className={classes().flexGrow}>
-        Rust Gym 
-      </Typography>
+      <IconButton 
+        className={classes().menuButton} 
+        color="inherit" 
+        aria-label="menu"
+      >
+        <MenuIcon />
+      </IconButton>
+      <Link 
+        variant="h6" 
+        style={{flexGrow: 1, color: "inherit" }}
+        href="#home"
+      >
+        Rust Gym
+      </Link>
       {
         S.auth.session ?
-          <Fragment>
-            <Typography variant="h6">
-                {S.auth.session.first_name} {S.auth.session.last_name}
-            </Typography>
-            <SignOutButton/>
-          </Fragment>
+          <BarItems/>
         :
           null
       }

@@ -87,8 +87,8 @@ const SubscribeForm: React.FC = () => {
     <form
       noValidate
       css={SubscribeFormStyles}
-      action="/api/invitation"
-      method="post"
+      action="/portal/#invitation"
+      method="get"
       id="mc-embedded-subscribe-form"
       name="mc-embedded-subscribe-form"
       target="_blank"

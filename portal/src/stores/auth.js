@@ -1,14 +1,26 @@
 import {observable} from 'mobx'
 
 class auth {
-    @observable email = "";
-    @observable password = "";
+    @observable email = '';
+    @observable password = '';
     @observable error = false;
-    @observable errMessage = "";
+    @observable errMessage = '';
     @observable session = null;
+    @observable first_name = '';
+    @observable last_name = '';
+    @observable accepted = false;
+    @observable invitation_id = '';
 
     constructor(){
 
+    }
+
+    onChangeFirstName = ({value}) => {
+        this.first_name = value
+    }
+
+    onChangeLastName = ({value}) => {
+        this.last_name = value
     }
 
     onChangeEmail = ({value}) => {
@@ -19,10 +31,14 @@ class auth {
         this.password = value
     }
 
+    onChangeAccepted = ({checked}) => {
+        this.accepted = checked;
+    }
+
     onClickSignIn = () => {
-        S.auth.error = false;
+        this.error = false;
         S.client.signin(this.email, this.password)
-            .then(res => S.router.navigate("#home"))
+            .then(res => S.router.navigate('#home'))
             .catch(err => {
                 if (err.status == 400){
                     S.auth.error = true;
@@ -33,9 +49,9 @@ class auth {
     }
 
     onClickSendInvitation = () => {
-        S.auth.error = false;
+        this.error = false;
         S.client.sendInvitation(this.email)
-            .then(res => {})
+            .then(res => {S.feedback.success('Email Sent')})
             .catch(err => {
                 if (err.status == 400){
                     S.auth.error = true;
@@ -45,10 +61,22 @@ class auth {
         ;
     }
 
+    onClickSignUp = () => {
+        this.error = false;
+        S.client.signup(this.invitation_id, this.email, this.password, this.first_name, this.last_name)
+            .then(res => S.router.redirect("#home"))
+            .catch(err => {
+                console.log(err.response.text)
+                S.feedback.error(err.response.text)
+                // console.log(JSON.stringify(err, null, 2))
+            })
+        ;
+    }
+
     onClickSignOut = () => {
-        S.auth.session = null;
+        this.session = null;
         S.client.signout()
-            .then(res => S.router.navigate("#signin"))
+            .then(res => S.router.navigate('#signin'))
             .catch(err => {
                 console.log(JSON.stringify(err, null, 2))
             })
@@ -56,8 +84,19 @@ class auth {
     }
 
     loadSession = async () => {
-        console.log("loadSession");
-        S.auth.session = JSON.parse(await S.client.session());
+        this.session = JSON.parse(await S.client.session());
+    }
+
+    loadInvitation = () => {
+        let email = S.router.query.get('email');
+        this.email = email;
+    }
+
+    loadSignUp = () => {
+        let id = S.router.query.get('id');
+        let email = S.router.query.get('email');
+        this.email = email;
+        this.invitation_id = id;
     }
 }
 

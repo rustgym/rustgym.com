@@ -2,6 +2,7 @@ use crate::app_settings::AppSettings;
 use crate::models::invitation::*;
 use chrono::Duration;
 use http::status::StatusCode;
+use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 use sendgrid::errors::SendgridError;
 use sendgrid::v3::*;
 
@@ -17,8 +18,11 @@ pub fn send_invitation(
     let expiration = Duration::minutes(app_settings.expiration_in_minutes as i64);
     let expires_at = created_at + expiration;
     let registration_link = format!(
-        "{}/portal/#register?id={}&email={}&expires_at={}",
-        url_prefix_for_email, id, email, expires_at
+        "{}/portal/?id={}&email={}&expires_at={}#signup",
+        url_prefix_for_email,
+        id,
+        utf8_percent_encode(&email, NON_ALPHANUMERIC),
+        expires_at
     );
     let template_data = [("registration_link".to_string(), registration_link)]
         .iter()
@@ -46,7 +50,7 @@ pub fn send_reset_password_invitation(
     let expiration = Duration::minutes(app_settings.expiration_in_minutes as i64);
     let expires_at = created_at + expiration;
     let registration_link = format!(
-        "{}/portal/#reset_password?id={}&email={}&expires_at={}",
+        "{}/portal/?id={}&email={}&expires_at={}#reset_password",
         url_prefix_for_email, id, email, expires_at
     );
     let template_data = [("registration_link".to_string(), registration_link)]

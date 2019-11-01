@@ -1,39 +1,50 @@
-import { observable, action, toJS } from "mobx";
-import {observe, setter} from 'mobx-decorators'
+import { observable, action, toJS, computed } from 'mobx';
 
+import {titles} from '../routes.js';
 
 class router {
-    @observable path = "";
+    @observable path = '';
+    @observable search = '';
     @observable state = null;
 
     constructor(){
-        let hash = window.location.hash ? window.location.hash : "#home";
+        let hash = window.location.hash ? window.location.hash : '#home';
+        let search = window.location.search;
         this.path = hash;
-        this.state = {};
-        window.history.pushState(toJS(this.state), "", this.path);
+        this.search = search;
+        document.title = titles[hash];
+        let url = `${this.search}${this.path}`;
+        window.history.pushState(toJS(this.state), '', url);
         window.onpopstate = (event) => {
-            if (window.location.hash) {
-                this.state = event.state || {}
-                this.path = window.location.hash || "#home";
-            }else{
-                this.navigate("#signin")
-            }
+            let hash = window.location.hash ? window.location.hash : '#home';
+            let search = window.location.search;
+            let state = event.state;
+            this.path = hash;
+            this.search = search;
+            this.state = state;
+            console.log(state, search, hash)
         };
     }
 
-    @action navigate(path) {
+    @computed get query() {
+        return new URLSearchParams(this.search)
+    }
+
+    @action navigate(path, search='') {
         if (path.match(/^#(\w)+$/)) {
             this.path = path;
-            this.state.path = path;
-            window.history.pushState(toJS(this.state), "", this.path);
+            this.search = search;
+            let url = `${this.search}${this.path}`;
+            window.history.pushState(toJS(this.state), '', url);
         }
     }
 
-    @action redirect(path) {
+    @action redirect(path, search='') {
         if (path.match(/^#(\w)+$/)) {
             this.path = path;
-            this.state.path = path;
-            window.history.replaceState(toJS(this.state), "", this.path);
+            this.search = search;
+            let url = `${this.search}${this.path}`;
+            window.history.replaceState(toJS(this.state), '', url);
         }
     }
 }

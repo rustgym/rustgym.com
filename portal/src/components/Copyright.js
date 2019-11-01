@@ -1,13 +1,13 @@
 import React from 'react';
-
+import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 
 const Copyright = () => 
   <Typography variant="body2" color="textSecondary" align="center">
     {'Copyright © '}
-    <a href="https://rustgym.com/">
+    <Link href="https://rustgym.com/">
         rustgym.com
-    </a>{' '}
+    </Link>{' '}
     {new Date().getFullYear()}
     {'.'}
   </Typography>

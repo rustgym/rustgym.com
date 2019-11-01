@@ -1,4 +1,5 @@
 import React from 'react';
+import {observer} from 'mobx-react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,8 +10,10 @@ import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import {observer} from 'mobx-react';
 import {Copyright} from '../components/Copyright.js';
+import {SignUpLink} from '../components/SignUpLink.js';
+import {ForgetPasswordLink} from '../components/ForgetPasswordLink.js';
+
 import {classes} from '../styles.js';
 
 const SignIn = observer(() => 
@@ -29,7 +32,6 @@ const SignIn = observer(() =>
           onChange={({target}) => S.auth.onChangeEmail(target)}
           variant="outlined"
           margin="normal"
-          required
           fullWidth
           id="email"
           label="Email Address"
@@ -43,7 +45,6 @@ const SignIn = observer(() =>
           onChange={({target}) => S.auth.onChangePassword(target)}
           variant="outlined"
           margin="normal"
-          required
           fullWidth
           name="password"
           label="Password"
@@ -63,14 +64,10 @@ const SignIn = observer(() =>
         </Button>
         <Grid container>
           <Grid item xs>
-            <Link href="#reset-password-invitation" variant="body2">
-              Forgot password?
-            </Link>
+            <ForgetPasswordLink/>
           </Grid>
           <Grid item>
-            <Link href="#invitation" variant="body2">
-              Sign Up
-            </Link>
+            <SignUpLink/>
           </Grid>
         </Grid>
       </form>

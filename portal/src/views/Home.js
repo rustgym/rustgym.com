@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react'
 
 const Home = () => {
-  useEffect(() => {
-    S.auth.loadSession()
-  })
+  S.auth.loadSession()
   return (
     <div>
       home
