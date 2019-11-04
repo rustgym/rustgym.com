@@ -22,7 +22,8 @@ class router {
             this.path = hash;
             this.search = search;
             this.state = state;
-            console.log(state, search, hash)
+            document.title = titles[hash];
+            console.log(this.state, search, hash)
         };
     }
 

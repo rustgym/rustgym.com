@@ -25,9 +25,9 @@ pub fn create_invitation(
     let code = send_invitation(invitation, &sender, &app_settings)?;
     match code {
         StatusCode::ACCEPTED => Ok(()),
-        StatusCode::BAD_REQUEST => Err(ServiceError::BadRequest {
-            info: format!("InvalidEmail"),
-        }),
+        StatusCode::BAD_REQUEST => {
+            Err(bad_request!("info".to_string() => "InvalidEmail".to_string()))
+        }
         _ => Err(ServiceError::InternalServerError),
     }
 }
@@ -46,9 +46,7 @@ pub fn create_reset_password_invitation(
         .filter(crate::schema::credentials::dsl::email.eq(&invitation_form.email))
         .first(&conn)
         .map_err(|err| match err {
-            diesel::result::Error::NotFound => ServiceError::BadRequest {
-                info: format!("InvalidEmail"),
-            },
+            diesel::result::Error::NotFound => bad_request!("info".to_string() => "InvalidEmail".to_string()),
             _ => ServiceError::InternalServerError,
         })?;
 
@@ -58,9 +56,9 @@ pub fn create_reset_password_invitation(
     let code = send_reset_password_invitation(invitation, &sender, &app_settings)?;
     match code {
         StatusCode::ACCEPTED => Ok(()),
-        StatusCode::BAD_REQUEST => Err(ServiceError::BadRequest {
-            info: format!("InvalidEmail"),
-        }),
+        StatusCode::BAD_REQUEST => {
+            Err(bad_request!("info".to_string() => "InvalidEmail".to_string()))
+        }
         _ => Err(ServiceError::InternalServerError),
     }
 }

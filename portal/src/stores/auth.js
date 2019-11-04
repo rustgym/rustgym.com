@@ -3,13 +3,14 @@ import {observable} from 'mobx'
 class auth {
     @observable email = '';
     @observable password = '';
-    @observable error = false;
-    @observable errMessage = '';
     @observable session = null;
     @observable first_name = '';
     @observable last_name = '';
     @observable accepted = false;
     @observable invitation_id = '';
+    @observable helperTextInfo = '';
+    @observable helperTextEmail = '';
+    @observable helperTextPassword = '';
 
     constructor(){
 
@@ -41,7 +42,15 @@ class auth {
             .then(res => S.router.navigate('#home'))
             .catch(err => {
                 if (err.status == 400){
-                    S.auth.error = true;
+                    if (err.helperText.password) {
+                        S.auth.helperTextPassword = err.helperText.password
+                    }
+                    if (err.helperText.email) {
+                        S.auth.helperTextEmail = err.helperText.email
+                    }
+                    if (err.helperText.info) {
+                        S.auth.helperTextInfo = err.helperText.info
+                    }
                 }
                 console.log(JSON.stringify(err, null, 2))
             })

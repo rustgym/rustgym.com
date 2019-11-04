@@ -13,8 +13,10 @@ import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import {Copyright} from '../components/Copyright.js';
 import {classes} from '../styles.js';
 
-const Invitation = observer(() => 
-  <Container component="main" maxWidth="xs">
+const Invitation = observer(() => {
+  S.auth.loadInvitation();
+  return (
+    <Container component="main" maxWidth="xs">
     <CssBaseline />
     <div className={classes().paper}>
       <Avatar className={classes().avatar}>
@@ -64,6 +66,7 @@ const Invitation = observer(() =>
       <Copyright />
     </Box>
   </Container>
-)
+  )
+})
 
 export { Invitation }

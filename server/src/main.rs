@@ -1,4 +1,9 @@
 #[macro_use]
+extern crate validator_derive;
+extern crate serde_derive;
+extern crate serde_json;
+extern crate validator;
+#[macro_use]
 extern crate diesel;
 #[macro_use]
 extern crate log;
@@ -6,6 +11,18 @@ extern crate log;
 extern crate diesel_migrations;
 #[macro_use]
 extern crate serde;
+
+macro_rules! bad_request(
+    { $($key:expr => $value:expr),+ } => {
+        {
+            let mut m = ::std::collections::HashMap::new();
+            $(
+                m.insert($key, $value);
+            )+
+            ServiceError::BadRequest(m)
+        }
+     };
+);
 
 use actix_files as fs;
 use actix_identity::{CookieIdentityPolicy, IdentityService};

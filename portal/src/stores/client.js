@@ -27,14 +27,19 @@ class client{
         .send(payload)
         .then(res => res.text)
         .catch(err => {
+          if (err.status == 400){
+            err.helperText = JSON.parse(err.response.text);
+            throw err;
+          }
           if (err.status == 401){
-            S.router.redirect('#signin')
+            S.router.redirect('#signin');
+            throw err;
           }
           if (err.status >= 500) {
             S.feedback.status = err.status;
             S.feedback.error('Internal Service Error');
+            throw err;
           } 
-          throw err;
         })
     }
   }

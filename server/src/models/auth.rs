@@ -1,4 +1,5 @@
 use uuid::Uuid;
+use validator::Validate;
 
 #[derive(Deserialize)]
 pub struct SignupForm {
@@ -10,9 +11,11 @@ pub struct SignupForm {
     pub middle_name: Option<String>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Validate)]
 pub struct SigninForm {
+    #[validate(email(message = "Email is not valid"))]
     pub email: String,
+    #[validate(length(min = 8, message = "Password is less than 8 characters"))]
     pub password: String,
 }
 
