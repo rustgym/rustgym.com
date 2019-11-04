@@ -97,8 +97,7 @@ class auth {
     }
 
     loadInvitation = () => {
-        let email = S.router.query.get('email');
-        this.email = email;
+        this.email = S.router.query.get('email') || '';
     }
 
     loadSignUp = () => {
