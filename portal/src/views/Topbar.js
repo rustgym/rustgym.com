@@ -9,7 +9,6 @@ import {
 } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import InputIcon from '@material-ui/icons/Input';
-import MenuIcon from '@material-ui/icons/Menu';
 import {classes} from '../styles.js'
 
 
@@ -32,15 +31,8 @@ const BarItems = () =>
   </Fragment>
 
 const Topbar = observer(() =>
-  <AppBar >
+  <AppBar style={{zIndex: 2000}} >
     <Toolbar>
-      <IconButton 
-        className={classes().menuButton} 
-        color="inherit" 
-        aria-label="menu"
-      >
-        <MenuIcon />
-      </IconButton>
       <Link 
         variant="h6" 
         style={{flexGrow: 1, color: "inherit" }}

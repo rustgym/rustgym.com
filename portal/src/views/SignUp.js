@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { observer } from 'mobx-react';
+import _ from 'lodash';
 
 import Container from '@material-ui/core/Container';
 import Avatar from '@material-ui/core/Avatar';
@@ -19,10 +20,17 @@ import {ForgetPasswordLink} from '../components/ForgetPasswordLink.js'
 
 import {classes} from '../styles.js';
 
-const SignUp = observer(() => {
-  S.auth.loadSignUp()
-  return (
-    <Container component="main" maxWidth="xs">
+class SignUpLoader extends Component {
+  componentDidMount(){
+    S.auth.loadSignUp();
+  }
+  render(){
+    return <SignUp/>
+  }
+}
+
+const SignUp = observer(() => 
+  <Container component="main" maxWidth="xs">
     <div className={classes().paper}>
       <Avatar className={classes().avatar}>
         <LockOutlinedIcon />
@@ -42,6 +50,8 @@ const SignUp = observer(() => {
               id="firstName"
               label="First Name"
               autoFocus
+              error={!!S.auth.helperText.first_name}
+              helperText={S.auth.helperText.first_name}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -53,6 +63,8 @@ const SignUp = observer(() => {
               label="Last Name"
               name="lastName"
               autoComplete="lname"
+              error={!!S.auth.helperText.last_name}
+              helperText={S.auth.helperText.last_name}
             />
           </Grid>
           <Grid item xs={12}>
@@ -65,6 +77,8 @@ const SignUp = observer(() => {
               autoComplete="email"
               readOnly
               value={S.auth.email}
+              error={!!S.auth.helperText.email}
+              helperText={S.auth.helperText.email}
             />
           </Grid>
           <Grid item xs={12}>
@@ -77,6 +91,8 @@ const SignUp = observer(() => {
               id="password"
               autoComplete="current-password"
               onChange={({target}) => S.auth.onChangePassword(target)}
+              error={!!S.auth.helperText.password}
+              helperText={S.auth.helperText.password}
             />
           </Grid>
           <Grid item xs={12}>
@@ -112,8 +128,6 @@ const SignUp = observer(() => {
       <Copyright />
     </Box>
   </Container>
+)
 
-  )
-})
-
-export { SignUp }
+export { SignUp, SignUpLoader }

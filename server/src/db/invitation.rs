@@ -2,6 +2,7 @@ use diesel::insert_into;
 use diesel::prelude::*;
 use http::status::StatusCode;
 use sendgrid::v3::Sender;
+use validator::Validate;
 
 use crate::app_settings::AppSettings;
 use crate::db::{get_conn, PgPool};
@@ -17,6 +18,8 @@ pub fn create_invitation(
     pool: &PgPool,
 ) -> Result<(), ServiceError> {
     use crate::schema::invitations::dsl::*;
+
+    invitation_form.validate()?;
 
     let conn = get_conn(pool)?;
     let invitation = insert_into(invitations)
@@ -40,6 +43,8 @@ pub fn create_reset_password_invitation(
 ) -> Result<(), ServiceError> {
     use crate::schema::credentials::dsl::*;
     use crate::schema::invitations::dsl::*;
+
+    invitation_form.validate()?;
 
     let conn = get_conn(pool)?;
     let _: Credential = credentials

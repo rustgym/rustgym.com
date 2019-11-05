@@ -18,7 +18,7 @@ pub fn send_invitation(
     let expiration = Duration::minutes(app_settings.expiration_in_minutes as i64);
     let expires_at = created_at + expiration;
     let registration_link = format!(
-        "{}/portal/?id={}&email={}&expires_at={}#signup",
+        "{}/portal/#signup?id={}&email={}&expires_at={}",
         url_prefix_for_email,
         id,
         utf8_percent_encode(&email, NON_ALPHANUMERIC),
@@ -50,7 +50,7 @@ pub fn send_reset_password_invitation(
     let expiration = Duration::minutes(app_settings.expiration_in_minutes as i64);
     let expires_at = created_at + expiration;
     let registration_link = format!(
-        "{}/portal/?id={}&email={}&expires_at={}#reset_password",
+        "{}/portal/#reset_password?id={}&email={}&expires_at={}",
         url_prefix_for_email, id, email, expires_at
     );
     let template_data = [("registration_link".to_string(), registration_link)]

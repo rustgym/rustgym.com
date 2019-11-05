@@ -1,5 +1,6 @@
 use actix_identity::Identity;
 use actix_web::{dev::Payload, Error, FromRequest, HttpRequest};
+use validator::Validate;
 
 use crate::errors::ServiceError;
 use crate::schema::users;
@@ -27,10 +28,12 @@ impl FromRequest for User {
     }
 }
 
-#[derive(Deserialize, AsChangeset)]
+#[derive(Deserialize, AsChangeset, Validate)]
 #[table_name = "users"]
 pub struct UserForm {
+    #[validate(length(min = 1, message = "First Name is empty"))]
     pub first_name: String,
+    #[validate(length(min = 1, message = "Last Name is empty"))]
     pub last_name: String,
     pub middle_name: Option<String>,
 }

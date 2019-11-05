@@ -23,10 +23,10 @@
     "dotenv-webpack": "^1.7.0",
     "lodash": "^4.17.15",
     "mobx": "^5.14.0",
-    "mobx-decorators": "^5.0.6",
     "mobx-react": "^6.1.4",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
+    "react-stripe-elements": "^5.1.0",
     "superagent": "^5.1.0",
     "webpack": "^4.41.1"
   },

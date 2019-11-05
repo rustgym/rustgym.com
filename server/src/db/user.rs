@@ -1,8 +1,10 @@
+use diesel::prelude::*;
+use diesel::update;
+use validator::Validate;
+
 use crate::db::{get_conn, PgPool};
 use crate::errors::ServiceError;
 use crate::models::user::{User, UserForm};
-use diesel::prelude::*;
-use diesel::update;
 
 pub fn get_user(user_id: i32, pool: &PgPool) -> Result<User, ServiceError> {
     use crate::schema::users::dsl::*;
@@ -25,6 +27,9 @@ pub fn update_user(
     if user.id != user_id {
         return Err(ServiceError::Forbidden);
     }
+
+    user_form.validate()?;
+
     let conn = get_conn(pool)?;
     let user: User = update(users.find(user_id))
         .set(&user_form)

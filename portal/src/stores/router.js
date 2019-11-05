@@ -1,6 +1,6 @@
 import { observable, action, toJS, computed } from 'mobx';
 
-import {titles} from '../routes.js';
+import {title} from '../routes.js';
 
 class router {
     @observable path = '';
@@ -8,22 +8,22 @@ class router {
     @observable state = null;
 
     constructor(){
-        let hash = window.location.hash ? window.location.hash : '#home';
-        let search = window.location.search;
-        this.path = hash;
-        this.search = search;
-        document.title = titles[hash];
-        let url = `${this.search}${this.path}`;
+        let hash = window.location.hash 
+        let parts = hash.split('?');
+        this.path = parts[0] || '#home';
+        this.search = '?' + (parts[1] || '');
+        document.title = title(this.path);
+        let url = `${this.path}${this.search}`;
         window.history.pushState(toJS(this.state), '', url);
         window.onpopstate = (event) => {
-            let hash = window.location.hash ? window.location.hash : '#home';
-            let search = window.location.search;
+            let hash = window.location.hash 
+            let parts = hash.split('?');
+            this.search = '?' + (parts[1] || '');
             let state = event.state;
-            this.path = hash;
-            this.search = search;
+            this.path = parts[0] || '#home';
             this.state = state;
-            document.title = titles[hash];
-            console.log(this.state, search, hash)
+            document.title = title(this.path);
+            console.log(this.state, this.search, this.path, hash)
         };
     }
 

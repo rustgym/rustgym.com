@@ -8,9 +8,7 @@ class auth {
     @observable last_name = '';
     @observable accepted = false;
     @observable invitation_id = '';
-    @observable helperTextInfo = '';
-    @observable helperTextEmail = '';
-    @observable helperTextPassword = '';
+    @observable helperText = {};
 
     constructor(){
 
@@ -37,20 +35,12 @@ class auth {
     }
 
     onClickSignIn = () => {
-        this.error = false;
+        this.helperText = {};
         S.client.signin(this.email, this.password)
             .then(res => S.router.navigate('#home'))
             .catch(err => {
                 if (err.status == 400){
-                    if (err.helperText.password) {
-                        S.auth.helperTextPassword = err.helperText.password
-                    }
-                    if (err.helperText.email) {
-                        S.auth.helperTextEmail = err.helperText.email
-                    }
-                    if (err.helperText.info) {
-                        S.auth.helperTextInfo = err.helperText.info
-                    }
+                    this.helperText = err.helperText;
                 }
                 console.log(JSON.stringify(err, null, 2))
             })
@@ -58,12 +48,12 @@ class auth {
     }
 
     onClickSendInvitation = () => {
-        this.error = false;
+        this.helperText = {};
         S.client.sendInvitation(this.email)
             .then(res => {S.feedback.success('Email Sent')})
             .catch(err => {
                 if (err.status == 400){
-                    S.auth.error = true;
+                    this.helperText = err.helperText;
                 }
                 console.log(JSON.stringify(err, null, 2))
             })
@@ -71,13 +61,14 @@ class auth {
     }
 
     onClickSignUp = () => {
-        this.error = false;
+        this.helperText = {};
         S.client.signup(this.invitation_id, this.email, this.password, this.first_name, this.last_name)
             .then(res => S.router.redirect("#home"))
             .catch(err => {
-                console.log(err.response.text)
-                S.feedback.error(err.response.text)
-                // console.log(JSON.stringify(err, null, 2))
+                if (err.status == 400){
+                    this.helperText = err.helperText;
+                }
+                console.log(JSON.stringify(err, null, 2))
             })
         ;
     }
@@ -97,7 +88,9 @@ class auth {
     }
 
     loadInvitation = () => {
-        this.email = S.router.query.get('email') || '';
+        let email = S.router.query.get('email') || '';
+        console.log(email)
+        this.email = email;
     }
 
     loadSignUp = () => {

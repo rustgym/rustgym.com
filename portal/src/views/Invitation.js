@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,10 +13,17 @@ import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import {Copyright} from '../components/Copyright.js';
 import {classes} from '../styles.js';
 
-const Invitation = observer(() => {
-  S.auth.loadInvitation();
-  return (
-    <Container component="main" maxWidth="xs">
+class InvitationLoader extends Component{
+  componentDidMount(){
+    S.auth.loadInvitation();
+  }
+  render(){
+    return <Invitation/>
+  }
+}
+
+const Invitation = observer(() =>
+  <Container component="main" maxWidth="xs">
     <CssBaseline />
     <div className={classes().paper}>
       <Avatar className={classes().avatar}>
@@ -37,7 +44,8 @@ const Invitation = observer(() => {
           name="email"
           autoComplete="email"
           autoFocus
-          error={S.auth.error}
+          error={S.auth.helperText.email || S.auth.helperText.info}
+          helperText={S.auth.helperText.email || S.auth.helperText.info}
         />
         <Button
           onClick={() => S.auth.onClickSendInvitation()}
@@ -66,7 +74,6 @@ const Invitation = observer(() => {
       <Copyright />
     </Box>
   </Container>
-  )
-})
+)
 
-export { Invitation }
+export { Invitation, InvitationLoader }

@@ -1,7 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { Component } from 'react'
+
+class HomeLoader extends Component {
+  componentDidMount(){
+    S.auth.loadSession();
+  }
+  render(){
+    return <Home/>
+  }
+}
 
 const Home = () => {
-  S.auth.loadSession()
   return (
     <div>
       home
@@ -9,4 +17,4 @@ const Home = () => {
   )
 }
 
-export {Home}
+export {Home, HomeLoader}

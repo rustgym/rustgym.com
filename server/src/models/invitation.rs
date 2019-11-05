@@ -2,9 +2,11 @@ use crate::schema::invitations;
 use chrono::{NaiveDateTime, Utc};
 use time::Duration;
 use uuid::Uuid;
+use validator::Validate;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Validate)]
 pub struct InvitationForm {
+    #[validate(email(message = "Email is invalid"))]
     pub email: String,
 }
 

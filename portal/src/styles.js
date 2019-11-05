@@ -4,8 +4,28 @@ import { amber, green } from '@material-ui/core/colors';
 
 let theme = createMuiTheme();
 theme = responsiveFontSizes(theme);
+const drawerWidth = 240;
 
 const styles = {
+  root: {
+    display: 'flex',
+  },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    marginTop: theme.spacing(7),
+  },
+  toolbar: theme.mixins.toolbar,
   success: {
     backgroundColor: green[600],
   },
@@ -59,7 +79,7 @@ const styles = {
   },
   menuButton: {
     marginRight: theme.spacing(2),
-  }
+  },
 }
 
 const classes = makeStyles(styles);

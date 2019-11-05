@@ -21,8 +21,9 @@ pub fn process_signup_form(
     use crate::schema::invitations::dsl::*;
     use crate::schema::users::dsl::*;
 
-    let conn = get_conn(pool)?;
+    signup_form.validate()?;
 
+    let conn = get_conn(pool)?;
     let invitation: Invitation = invitations
         .find(signup_form.invitation_id)
         .first(&conn)
@@ -76,9 +77,9 @@ pub fn process_signin_form(
     use crate::schema::credentials::dsl::*;
     use crate::schema::users::dsl::*;
 
-    let conn = get_conn(pool)?;
-
     signin_form.validate()?;
+
+    let conn = get_conn(pool)?;
     let credential: Credential = credentials
         .filter(email.eq(signin_form.email))
         .first(&conn)
@@ -101,8 +102,10 @@ pub fn process_reset_password_form(
 ) -> Result<Credential, ServiceError> {
     use crate::schema::credentials::dsl::*;
     use crate::schema::invitations::dsl::*;
-    let conn = get_conn(pool)?;
 
+    reset_password_form.validate()?;
+
+    let conn = get_conn(pool)?;
     let invitation: Invitation = invitations
         .find(reset_password_form.invitation_id)
         .first(&conn)

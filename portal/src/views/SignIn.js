@@ -38,8 +38,8 @@ const SignIn = observer(() =>
           name="email"
           autoComplete="email"
           autoFocus
-          error={S.auth.helperTextEmail.length != 0 || S.auth.helperTextInfo.length != 0}
-          helperText={S.auth.helperTextEmail || S.auth.helperTextInfo}
+          error={S.auth.helperText.email || S.auth.helperText.info}
+          helperText={S.auth.helperText.email || S.auth.helperText.info}
         />
         <TextField
           value={S.auth.password}
@@ -52,8 +52,8 @@ const SignIn = observer(() =>
           type="password"
           id="password"
           autoComplete="current-password"
-          error={S.auth.helperTextPassword.length != 0 || S.auth.helperTextInfo.length != 0}
-          helperText={S.auth.helperTextPassword || S.auth.helperTextInfo}
+          error={S.auth.helperText.Password || S.auth.helperText.info}
+          helperText={S.auth.helperText.Password || S.auth.helperText.info}
         />
         <Button
           onClick={() => S.auth.onClickSignIn()}
