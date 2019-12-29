@@ -11,7 +11,9 @@ pub fn get_user(user_id: i32, pool: &PgPool) -> Result<User, ServiceError> {
 
     let conn = get_conn(pool)?;
     let user: User = users.find(user_id).first(&conn).map_err(|err| match err {
-        diesel::result::Error::NotFound => bad_request!("info".to_string() => "NotFound".to_string()),
+        diesel::result::Error::NotFound => {
+            bad_request!("info".to_string() => "NotFound".to_string())
+        }
         _ => ServiceError::InternalServerError,
     })?;
     Ok(user)

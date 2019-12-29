@@ -37,6 +37,7 @@ const Topbar = observer(() =>
         variant="h6" 
         style={{flexGrow: 1, color: "inherit" }}
         href="#home"
+        underline="none"
       >
         Rust Gym
       </Link>

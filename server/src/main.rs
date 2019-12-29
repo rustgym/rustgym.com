@@ -23,7 +23,6 @@ macro_rules! bad_request(
         }
      };
 );
-
 use actix_files as fs;
 use actix_identity::{CookieIdentityPolicy, IdentityService};
 use actix_session::CookieSession;
@@ -31,6 +30,7 @@ use actix_web::{middleware, web, App, HttpServer};
 use dotenv::dotenv;
 use sendgrid::v3::*;
 use std::env;
+use std::io;
 
 mod api;
 mod app_settings;
@@ -44,13 +44,15 @@ use app_settings::AppSettings;
 
 static SESSION_SIGNING_KEY: &[u8] = &[0; 32];
 
-fn main() -> Result<(), std::io::Error> {
+#[actix_rt::main]
+async fn main() -> io::Result<()> {
     dotenv().ok();
 
     env::set_var("RUST_LOG", "info,actix_web=info");
     env_logger::init();
 
     let app_settings = AppSettings::new();
+    println!("{}", &app_settings.domain);
 
     let sendgrid_api_key = env::var("SENDGRID_API_KEY").expect("Fail to get sendgrid_api_key");
     let sender = Sender::new(sendgrid_api_key);
@@ -77,14 +79,13 @@ fn main() -> Result<(), std::io::Error> {
                     .name("rustgym_auth")
                     .path("/")
                     .domain(&app_settings.domain)
-                    .max_age_time(chrono::Duration::minutes(1))
+                    .max_age_time(chrono::Duration::minutes(10))
                     .secure(false),
             ))
             .service(web::scope("/api/").configure(api::api_config))
             .service(fs::Files::new("/portal/", "portal").index_file("index.html"))
             .service(fs::Files::new("/", "static").index_file("index.html"))
     };
-
     info!("Starting server");
-    HttpServer::new(app).bind(addr)?.run()
+    HttpServer::new(app).bind(addr)?.run().await
 }

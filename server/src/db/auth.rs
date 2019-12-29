@@ -40,7 +40,7 @@ pub fn process_signup_form(
     }
 
     let cs: Vec<Credential> = credentials
-        .filter(crate::schema::credentials::dsl::email.eq(&signup_form.email))
+        .filter(crate::schema::credentials::dsl::email.eq(&signup_form.email.to_uppercase()))
         .load(&conn)
         .map_err(|_| ServiceError::InternalServerError)?;
     if cs.len() > 0 {
@@ -59,7 +59,7 @@ pub fn process_signup_form(
     let credential: Credential = insert_into(credentials)
         .values(Credential::new(
             user.id,
-            signup_form.email,
+            signup_form.email.to_uppercase(),
             signup_form.password,
             app_settings.local_salt.to_string(),
         ))
@@ -81,10 +81,12 @@ pub fn process_signin_form(
 
     let conn = get_conn(pool)?;
     let credential: Credential = credentials
-        .filter(email.eq(signin_form.email))
+        .filter(email.eq(signin_form.email.to_uppercase()))
         .first(&conn)
         .map_err(|err| match err {
-            diesel::result::Error::NotFound => bad_request!("info".to_string() => "Invalid".to_string()),
+            diesel::result::Error::NotFound => {
+                bad_request!("info".to_string() => "Invalid".to_string())
+            }
             _ => ServiceError::InternalServerError,
         })?;
     let user: User = users.find(credential.user_id).first(&conn)?;
@@ -121,7 +123,9 @@ pub fn process_reset_password_form(
         return Err(bad_request!("info".to_string() => "InvalidEmail".to_string()));
     }
     let credential: Credential = credentials
-        .filter(crate::schema::credentials::dsl::email.eq(&reset_password_form.email))
+        .filter(
+            crate::schema::credentials::dsl::email.eq(&reset_password_form.email.to_uppercase()),
+        )
         .first(&conn)
         .map_err(|_| ServiceError::InternalServerError)?;
     let credential: Credential = credential.update_password(

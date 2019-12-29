@@ -9,20 +9,20 @@ use invitation::{invitation, reset_password_invitation};
 use user::{get_user, list_user, update_user};
 
 pub fn api_config(cfg: &mut web::ServiceConfig) {
-    cfg.service(web::resource("/session").route(web::get().to_async(session)))
-        .service(web::resource("/signup").route(web::post().to_async(signup)))
-        .service(web::resource("/signin").route(web::post().to_async(signin)))
+    cfg.service(web::resource("/session").route(web::get().to(session)))
+        .service(web::resource("/signup").route(web::post().to(signup)))
+        .service(web::resource("/signin").route(web::post().to(signin)))
         .service(web::resource("/signout").route(web::post().to(signout)))
-        .service(web::resource("/invitation").route(web::post().to_async(invitation)))
-        .service(web::resource("/reset-password").route(web::post().to_async(reset_password)))
+        .service(web::resource("/invitation").route(web::post().to(invitation)))
+        .service(web::resource("/reset-password").route(web::post().to(reset_password)))
         .service(
             web::resource("/reset-password-invitation")
-                .route(web::post().to_async(reset_password_invitation)),
+                .route(web::post().to(reset_password_invitation)),
         )
         .service(
             web::resource("/users/{user_id}")
-                .route(web::get().to_async(get_user))
-                .route(web::post().to_async(update_user)),
+                .route(web::get().to(get_user))
+                .route(web::post().to(update_user)),
         )
-        .service(web::resource("/users").route(web::get().to_async(list_user)));
+        .service(web::resource("/users").route(web::get().to(list_user)));
 }

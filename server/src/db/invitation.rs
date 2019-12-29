@@ -23,7 +23,7 @@ pub fn create_invitation(
 
     let conn = get_conn(pool)?;
     let invitation = insert_into(invitations)
-        .values(Invitation::from(invitation_form.email))
+        .values(Invitation::from(invitation_form.email.to_uppercase()))
         .get_result(&conn)?;
     let code = send_invitation(invitation, &sender, &app_settings)?;
     match code {
@@ -48,15 +48,17 @@ pub fn create_reset_password_invitation(
 
     let conn = get_conn(pool)?;
     let _: Credential = credentials
-        .filter(crate::schema::credentials::dsl::email.eq(&invitation_form.email))
+        .filter(crate::schema::credentials::dsl::email.eq(&invitation_form.email.to_uppercase()))
         .first(&conn)
         .map_err(|err| match err {
-            diesel::result::Error::NotFound => bad_request!("info".to_string() => "InvalidEmail".to_string()),
+            diesel::result::Error::NotFound => {
+                bad_request!("info".to_string() => "InvalidEmail".to_string())
+            }
             _ => ServiceError::InternalServerError,
         })?;
 
     let invitation = insert_into(invitations)
-        .values(Invitation::from(invitation_form.email))
+        .values(Invitation::from(invitation_form.email.to_uppercase()))
         .get_result(&conn)?;
     let code = send_reset_password_invitation(invitation, &sender, &app_settings)?;
     match code {

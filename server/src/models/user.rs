@@ -1,5 +1,7 @@
 use actix_identity::Identity;
 use actix_web::{dev::Payload, Error, FromRequest, HttpRequest};
+use futures::future::Future;
+use std::pin::Pin;
 use validator::Validate;
 
 use crate::errors::ServiceError;
@@ -17,14 +19,17 @@ pub struct User {
 impl FromRequest for User {
     type Config = ();
     type Error = Error;
-    type Future = Result<User, Error>;
+    type Future = Pin<Box<dyn Future<Output = Result<User, Error>>>>;
 
     fn from_request(req: &HttpRequest, pl: &mut Payload) -> Self::Future {
-        if let Some(identity) = Identity::from_request(req, pl)?.identity() {
-            let user: User = serde_json::from_str(&identity)?;
-            return Ok(user);
-        }
-        Err(ServiceError::Unauthorized.into())
+        let fut = Identity::from_request(req, pl);
+        Box::pin(async move {
+            if let Some(identity) = fut.await?.identity() {
+                let user: User = serde_json::from_str(&identity)?;
+                return Ok(user);
+            };
+            Err(ServiceError::Unauthorized.into())
+        })
     }
 }
 
