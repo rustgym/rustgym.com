@@ -17,5 +17,13 @@ module.exports = {
   },
   resolve: {
     extensions: ['*', '.js', '.jsx']
+  },
+  devServer: {
+    // this achieves the same effect as the first example
+    // with the bonus of not having to update your config
+    // if new subdomains need to access the dev server
+    allowedHosts: [
+      'imac',
+    ]
   }
 };

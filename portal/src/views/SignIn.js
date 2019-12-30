@@ -52,8 +52,8 @@ const SignIn = observer(() =>
           type="password"
           id="password"
           autoComplete="current-password"
-          error={S.auth.helperText.Password || S.auth.helperText.info}
-          helperText={S.auth.helperText.Password || S.auth.helperText.info}
+          error={S.auth.helperText.password || S.auth.helperText.info}
+          helperText={S.auth.helperText.password || S.auth.helperText.info}
         />
         <Button
           onClick={() => S.auth.onClickSignIn()}

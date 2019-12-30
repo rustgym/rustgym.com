@@ -1,5 +1,6 @@
 use actix_web::error::BlockingError;
 use actix_web::error::ResponseError;
+use actix_web::http::StatusCode;
 use actix_web::HttpResponse;
 use diesel::result::{DatabaseErrorKind, Error as DBError};
 use diesel_migrations::RunMigrationsError;
@@ -22,10 +23,20 @@ pub enum ServiceError {
 impl ResponseError for ServiceError {
     fn error_response(&self) -> HttpResponse {
         match self {
-            ServiceError::InternalServerError => HttpResponse::InternalServerError().into(),
-            ServiceError::BadRequest(_) => HttpResponse::BadRequest().into(),
-            ServiceError::Unauthorized => HttpResponse::Unauthorized().into(),
-            ServiceError::Forbidden => HttpResponse::Forbidden().into(),
+            ServiceError::InternalServerError => {
+                HttpResponse::InternalServerError().body(self.to_string())
+            }
+            ServiceError::BadRequest(_) => HttpResponse::BadRequest().body(self.to_string()),
+            ServiceError::Unauthorized => HttpResponse::Unauthorized().body(self.to_string()),
+            ServiceError::Forbidden => HttpResponse::Forbidden().body(self.to_string()),
+        }
+    }
+    fn status_code(&self) -> StatusCode {
+        match self {
+            ServiceError::InternalServerError => StatusCode::INTERNAL_SERVER_ERROR,
+            ServiceError::BadRequest(_) => StatusCode::BAD_REQUEST,
+            ServiceError::Unauthorized => StatusCode::UNAUTHORIZED,
+            ServiceError::Forbidden => StatusCode::FORBIDDEN,
         }
     }
 }
